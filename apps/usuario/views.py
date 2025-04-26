@@ -10,7 +10,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         tipo = self.request.query_params.get('tipo')
         if tipo:
             # Retorna apenas os usuários do tipo especificado
-            return self.queryset.filter(tipo=tipo)
+            return self.queryset.all().filter(tipo=tipo)
+
         # Retorna todos os usuários, incluindo CLIENTE, PROFISSIONAL e ADMIN
         return self.queryset
 

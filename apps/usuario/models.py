@@ -53,3 +53,8 @@ class Usuario(AbstractUser):
 
     def __str__(self):
         return f'{self.nome_completo} ({self.get_tipo_display()})'
+    
+
+class Meta:
+    verbose_name = "Usuário"
+    verbose_name_plural = "Usuários"
