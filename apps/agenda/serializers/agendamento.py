@@ -7,9 +7,13 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        """
-        Validações adicionais no serializer.
-        """
-        agendamento = Agendamento(**data)
-        agendamento.clean()  # Chama o método clean do modelo para validações personalizadas
+        if self.instance:
+            # É uma edição: use a instância existente e atualize os dados nela
+            for attr, value in data.items():
+                setattr(self.instance, attr, value)
+            self.instance.clean()
+        else:
+            # É uma criação: instancia novo agendamento
+            agendamento = Agendamento(**data)
+            agendamento.clean()
         return data
