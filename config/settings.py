@@ -30,8 +30,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Segurança
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sellet.up.railway.app"
+]
+
 
 
 # Aplicativos instalados
