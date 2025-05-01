@@ -129,7 +129,11 @@ REST_FRAMEWORK = {
 # CORS para o frontend local
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://hml.selletesmalteria.com.br",
+    "https://selletesmalteria.com.br",
+    
 ]
+
 
 
 # Segurança de cookies (obrigatório para HTTPS em produção)
