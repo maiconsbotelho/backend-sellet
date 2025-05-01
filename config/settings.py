@@ -103,3 +103,7 @@ REST_FRAMEWORK = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-f1303.up.railway.app"
+]
