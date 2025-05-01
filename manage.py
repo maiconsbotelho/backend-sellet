@@ -4,6 +4,16 @@ import os
 import sys
 from pathlib import Path
 
+import socket
+
+def force_ipv4():
+    original_getaddrinfo = socket.getaddrinfo
+    def getaddrinfo_ipv4(*args, **kwargs):
+        return [info for info in original_getaddrinfo(*args, **kwargs) if info[0] == socket.AF_INET]
+    socket.getaddrinfo = getaddrinfo_ipv4
+
+force_ipv4()
+
 
 def main():
     """Run administrative tasks."""
