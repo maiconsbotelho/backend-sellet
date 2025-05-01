@@ -3,6 +3,24 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 
+import socket
+
+# Força uso de IPv4 no Railway (evita o uso de IPv6 que está falhando)
+def force_ipv4():
+    original_getaddrinfo = socket.getaddrinfo
+
+    def getaddrinfo_ipv4(*args, **kwargs):
+        return [
+            info for info in original_getaddrinfo(*args, **kwargs)
+            if info[0] == socket.AF_INET
+        ]
+
+    socket.getaddrinfo = getaddrinfo_ipv4
+
+# Só ativa no Railway
+if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_STATIC_URL"):
+    force_ipv4()
+
 # Carrega variáveis do .env
 load_dotenv()
 
