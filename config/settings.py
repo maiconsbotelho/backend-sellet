@@ -104,6 +104,16 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
 
+# CSRF: Domínios confiáveis para envio de formulários
 CSRF_TRUSTED_ORIGINS = [
     "https://web-production-f1303.up.railway.app"
 ]
+
+# Segurança de cookies (obrigatório para HTTPS em produção)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Segurança de resposta (evita XSS e sniffing de MIME)
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
