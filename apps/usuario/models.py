@@ -52,7 +52,8 @@ class Usuario(AbstractUser):
     objects = UsuarioManager()  # Usa o gerenciador personalizado para o modelo
 
     def __str__(self):
-        return f'{self.nome_completo} ({self.get_tipo_display()})'
+        return f'{self.nome_completo}'
+    # return f'{self.nome_completo} ({self.get_tipo_display()})'
     
 
 class Meta:

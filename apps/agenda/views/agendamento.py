@@ -107,7 +107,7 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                         "ocupado": True,
                         "agendamento_id": agendamento_origem.id,
                         "cliente_id": agendamento_origem.cliente.id,
-                        "nome_cliente": agendamento_origem.cliente.nome,
+                        "nome_cliente": str(agendamento_origem.cliente),
                         "servico_id": agendamento_origem.servico.id,
                         "servico_nome": agendamento_origem.servico.nome
                     }
