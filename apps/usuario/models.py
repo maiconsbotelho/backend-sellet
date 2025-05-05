@@ -46,6 +46,16 @@ class Usuario(AbstractUser):
     created_at = models.DateTimeField(default=now, editable=False)  # Data de criação
     updated_at = models.DateTimeField(auto_now=True)  # Data de última atualização
 
+        # Campos opcionais adicionados
+    telefone = models.CharField(max_length=15, null=True, blank=True) # Ex: 5551997562936
+    cpf = models.CharField(max_length=11, null=True, blank=True, unique=True) # Ex: 07777788888 (Considerar validação e máscara)
+    cep = models.CharField(max_length=8, null=True, blank=True) # Ex: 93285474 (Considerar validação)
+    rua = models.CharField(max_length=255, null=True, blank=True)
+    numero_casa = models.CharField(max_length=10, null=True, blank=True) # Usar CharField para flexibilidade (ex: "123A", "S/N")
+    cidade = models.CharField(max_length=100, null=True, blank=True)
+    uf = models.CharField(max_length=2, null=True, blank=True) # Sigla do estado (ex: RS, SP)
+
+
     USERNAME_FIELD = 'email'  # Define o e-mail como identificador principal para login
     REQUIRED_FIELDS = ['nome_completo', 'tipo']  # Campos obrigatórios além do e-mail
 
