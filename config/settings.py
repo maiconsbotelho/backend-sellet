@@ -6,22 +6,6 @@ from datetime import timedelta
 
 import socket
 
-# Força uso de IPv4 no Railway (evita o uso de IPv6 que está falhando)
-def force_ipv4():
-    original_getaddrinfo = socket.getaddrinfo
-
-    def getaddrinfo_ipv4(*args, **kwargs):
-        return [
-            info for info in original_getaddrinfo(*args, **kwargs)
-            if info[0] == socket.AF_INET
-        ]
-
-    socket.getaddrinfo = getaddrinfo_ipv4
-
-# Só ativa no Railway
-if os.getenv("RAILWAY_ENVIRONMENT") or os.getenv("RAILWAY_STATIC_URL"):
-    force_ipv4()
-
 # Carrega variáveis do .env
 load_dotenv()
 
@@ -34,8 +18,12 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://sellet.up.railway.app"
+    "https://sellet.up.railway.app",
+    "http://localhost:3000",  # necessário para testes locais
+    "https://hml.selletesmalteria.com.br",
+    "https://selletesmalteria.com.br",
 ]
+
 
 
 
@@ -174,5 +162,5 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
-    "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "apps.usuario.serializers_auth.CustomTokenObtainPairSerializer",
 }
