@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers_auth import CustomTokenObtainPairSerializer
+from .serializers import UsuarioSerializer  # Importa o serializer do usuário
 
 
 class CookieTokenObtainPairView(TokenObtainPairView):
@@ -57,7 +58,18 @@ class CookieTokenRefreshView(TokenRefreshView):
 
 class LogoutView(APIView):
     def post(self, request):
-        response = Response({"detail": "Logout realizado com sucesso"}, status=status.HTTP_200_OK)
+        response = Response(
+            {"detail": "Logout realizado com sucesso"},
+            status=status.HTTP_200_OK
+        )
         response.delete_cookie("access_token", path="/")
         response.delete_cookie("refresh_token", path="/api/usuario/refresh/")
         return response
+
+
+class MeView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = UsuarioSerializer(request.user)
+        return Response(serializer.data)
