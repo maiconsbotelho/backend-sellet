@@ -83,6 +83,10 @@ DATABASES = {
     )
 }
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 # Modelo de usuário customizado
 AUTH_USER_MODEL = 'usuario.Usuario'
 

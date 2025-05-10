@@ -1,18 +1,17 @@
 from rest_framework import viewsets
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Usuario, TipoUsuario
 from .serializers import UsuarioSerializer, UsuarioCreateSerializer
 
+
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
+    parser_classes = [MultiPartParser, FormParser]  # Permite upload de imagem via multipart/form-data
 
     def get_queryset(self):
-        # Filtra dinamicamente com base no parâmetro 'tipo'
         tipo = self.request.query_params.get('tipo')
         if tipo:
-            # Retorna apenas os usuários do tipo especificado
-            return self.queryset.all().filter(tipo=tipo)
-
-        # Retorna todos os usuários, incluindo CLIENTE, PROFISSIONAL e ADMIN
+            return self.queryset.filter(tipo=tipo)
         return self.queryset
 
     def get_serializer_class(self):
