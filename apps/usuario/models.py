@@ -54,7 +54,8 @@ class Usuario(AbstractUser):
     numero_casa = models.CharField(max_length=10, null=True, blank=True) # Usar CharField para flexibilidade (ex: "123A", "S/N")
     cidade = models.CharField(max_length=100, null=True, blank=True)
     uf = models.CharField(max_length=2, null=True, blank=True) # Sigla do estado (ex: RS, SP)
-    foto_perfil = models.ImageField(upload_to='fotos_perfil/', null=True, blank=True)
+    foto_perfil = models.URLField(null=True, blank=True)
+
 
 
     USERNAME_FIELD = 'email'  # Define o e-mail como identificador principal para login
