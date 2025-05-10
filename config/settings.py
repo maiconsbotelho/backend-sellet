@@ -3,7 +3,6 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
-
 import socket
 
 # Carrega variáveis do .env
@@ -17,15 +16,13 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
+# Confiança para CSRF
 CSRF_TRUSTED_ORIGINS = [
     "https://sellet.up.railway.app",
-    "http://localhost:3000",  # necessário para testes locais
+    "http://localhost:3000",
     "https://hml.selletesmalteria.com.br",
     "https://selletesmalteria.com.br",
 ]
-
-
-
 
 # Aplicativos instalados
 INSTALLED_APPS = [
@@ -77,19 +74,19 @@ TEMPLATES = [
     },
 ]
 
-# Banco de dados via Supabase (.env DATABASE_URL)
+# Banco de dados via .env
 DATABASES = {
     'default': dj_database_url.config(
         default=os.getenv('DATABASE_URL'),
         conn_max_age=600,
-        ssl_require=not DEBUG  # SSL apenas se for produção
+        ssl_require=not DEBUG
     )
 }
 
-# Usuário customizado
+# Modelo de usuário customizado
 AUTH_USER_MODEL = 'usuario.Usuario'
 
-# Validação de senhas
+# Validação de senha
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -108,35 +105,36 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
-
-# Configuração padrão do DRF
+# Django REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': None,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
 }
 
-# CORS para o frontend local
+# CORS
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://hml.selletesmalteria.com.br",
     "https://selletesmalteria.com.br",
-    
 ]
-
 CORS_ALLOW_CREDENTIALS = True
 
+# (Opcional) Permitir subdomínios com regex
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://.*\.selletesmalteria\.com\.br$"
+]
 
+# Cookies seguros (ativado apenas em produção)
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
 
-
-# Segurança de cookies (obrigatório para HTTPS em produção)
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-
-# Segurança de resposta (evita XSS e sniffing de MIME)
+# Segurança extra HTTP
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-
+# Logging
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -151,10 +149,7 @@ LOGGING = {
     },
 }
 
-REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
-    'rest_framework_simplejwt.authentication.JWTAuthentication',
-)
-
+# Simple JWT
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
