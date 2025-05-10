@@ -3,7 +3,8 @@ from .models import Usuario, TipoUsuario
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    foto_perfil = serializers.ImageField(required=False, allow_null=True)
+    # Agora o campo é uma URL (string), não mais imagem binária
+    foto_perfil = serializers.URLField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Usuario
@@ -14,19 +15,23 @@ class UsuarioSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
         extra_kwargs = {
-            'telefone': {'required': False, 'allow_null': True},
-            'cpf': {'required': False, 'allow_null': True},
-            'cep': {'required': False, 'allow_null': True},
-            'rua': {'required': False, 'allow_null': True},
-            'numero_casa': {'required': False, 'allow_null': True},
-            'cidade': {'required': False, 'allow_null': True},
-            'uf': {'required': False, 'allow_null': True},
+            'telefone': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'cpf': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'cep': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'rua': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'numero_casa': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'cidade': {'required': False, 'allow_null': True, 'allow_blank': True},
+            'uf': {'required': False, 'allow_null': True, 'allow_blank': True},
         }
 
 
 class UsuarioCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
-    foto_perfil = serializers.ImageField(required=False, allow_null=True)
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+    foto_perfil = serializers.URLField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Usuario
