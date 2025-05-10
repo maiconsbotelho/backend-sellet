@@ -109,9 +109,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': None,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'apps.usuario.authentication.CookieJWTAuthentication',
     ],
 }
+
 
 # CORS
 CORS_ALLOWED_ORIGINS = [
