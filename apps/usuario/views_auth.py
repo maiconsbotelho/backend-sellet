@@ -3,9 +3,10 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings  # para acessar DEBUG
 
 from .serializers_auth import CustomTokenObtainPairSerializer
-from .serializers import UsuarioSerializer  # Importa o serializer do usuário
+from .serializers import UsuarioSerializer
 
 
 class CookieTokenObtainPairView(TokenObtainPairView):
@@ -18,12 +19,13 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             refresh = response.data.get("refresh")
             access = response.data.get("access")
 
+            # Define cookies compatíveis com domínios cruzados via HTTPS
             response.set_cookie(
                 key="refresh_token",
                 value=refresh,
                 httponly=True,
                 secure=True,
-                samesite="Strict",
+                samesite="None",
                 path="/api/usuario/refresh/"
             )
             response.set_cookie(
@@ -31,10 +33,11 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 value=access,
                 httponly=True,
                 secure=True,
-                samesite="Strict",
+                samesite="None",
                 path="/"
             )
 
+            # Remove tokens do corpo da resposta
             response.data.pop("refresh", None)
             response.data.pop("access", None)
 
