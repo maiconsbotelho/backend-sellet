@@ -19,7 +19,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             refresh = response.data.get("refresh")
             access = response.data.get("access")
 
-            # Define cookies compatíveis com domínios cruzados via HTTPS
+            # Cookies com suporte a domínios diferentes via HTTPS
             response.set_cookie(
                 key="refresh_token",
                 value=refresh,
@@ -37,7 +37,11 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 path="/"
             )
 
-            # Remove tokens do corpo da resposta
+            # Cabeçalhos CORS explícitos (importante para o login funcionar via frontend externo)
+            response["Access-Control-Allow-Credentials"] = "true"
+            response["Access-Control-Allow-Origin"] = "https://hml.selletesmalteria.com.br"
+
+            # Remove os tokens do corpo da resposta
             response.data.pop("refresh", None)
             response.data.pop("access", None)
 
