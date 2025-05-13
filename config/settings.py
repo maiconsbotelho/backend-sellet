@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
 import socket
+from corsheaders.defaults import default_headers
 
 # Carrega variáveis do .env
 load_dotenv()
@@ -129,6 +130,11 @@ CORS_ALLOW_CREDENTIALS = True
 # (Opcional) Permitir subdomínios com regex
 CORS_ALLOWED_ORIGIN_REGEXES = [
     r"^https://.*\.selletesmalteria\.com\.br$"
+]
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'access-control-allow-origin',
+    'access-control-allow-credentials',
 ]
 
 # Cookies seguros (ativado apenas em produção)
