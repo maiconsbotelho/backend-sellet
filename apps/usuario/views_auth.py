@@ -40,8 +40,8 @@ class CookieTokenObtainPairView(TokenObtainPairView):
             )
 
             # Cabeçalhos CORS explícitos (importante para o login funcionar via frontend externo)
-            # response["Access-Control-Allow-Credentials"] = "true"
-            # response["Access-Control-Allow-Origin"] = "https://hml.selletesmalteria.com.br"
+            response["Access-Control-Allow-Credentials"] = "true"
+            response["Access-Control-Allow-Origin"] = "https://hml.selletesmalteria.com.br"
 
             # Remove os tokens do corpo da resposta
             response.data.pop("refresh", None)
