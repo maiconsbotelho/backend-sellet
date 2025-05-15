@@ -26,7 +26,7 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 httponly=True,
                 secure=True,
                 samesite="None",
-                path="/api/usuario/refresh/"
+                path="/api/usuario/refresh/",
                 max_age=7 * 24 * 60 * 60,  # 7 dias
             )
             response.set_cookie(
@@ -35,13 +35,13 @@ class CookieTokenObtainPairView(TokenObtainPairView):
                 httponly=True,
                 secure=True,
                 samesite="None",
-                path="/"
+                path="/",
                 max_age=30 * 60,  # 30 minutos
             )
 
             # Cabeçalhos CORS explícitos (importante para o login funcionar via frontend externo)
-            response["Access-Control-Allow-Credentials"] = "true"
-            response["Access-Control-Allow-Origin"] = "https://hml.selletesmalteria.com.br"
+            # response["Access-Control-Allow-Credentials"] = "true"
+            # response["Access-Control-Allow-Origin"] = "https://hml.selletesmalteria.com.br"
 
             # Remove os tokens do corpo da resposta
             response.data.pop("refresh", None)
