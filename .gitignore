@@ -7,3 +7,5 @@ db.sqlite3
 *.py~ 
 *.swp
 .env
+.env.homologacao
+.env.producao
