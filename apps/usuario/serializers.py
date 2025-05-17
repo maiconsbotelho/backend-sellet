@@ -5,13 +5,14 @@ from .models import Usuario, TipoUsuario
 class UsuarioSerializer(serializers.ModelSerializer):
     # Agora o campo é uma URL (string), não mais imagem binária
     foto_perfil = serializers.URLField(required=False, allow_null=True, allow_blank=True)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = Usuario
         fields = [
             'id', 'email', 'nome_completo', 'tipo', 'created_at', 'updated_at',
             'telefone', 'cpf', 'cep', 'rua', 'numero_casa', 'cidade', 'uf',
-            'is_active', 'foto_perfil'
+            'is_active', 'foto_perfil', 'password'
         ]
         read_only_fields = ['id', 'created_at', 'updated_at']
         extra_kwargs = {
@@ -23,6 +24,17 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'cidade': {'required': False, 'allow_null': True, 'allow_blank': True},
             'uf': {'required': False, 'allow_null': True, 'allow_blank': True},
         }
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop('password', None)
+        # Atualiza outros campos normalmente
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        # Se veio uma nova senha, atualiza usando set_password
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
 
 class UsuarioCreateSerializer(serializers.ModelSerializer):
