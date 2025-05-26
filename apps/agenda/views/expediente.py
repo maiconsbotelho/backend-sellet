@@ -6,6 +6,10 @@ from datetime import datetime
 from apps.agenda.models import HorarioExpediente, Agendamento
 from apps.agenda.serializers import HorarioExpedienteSerializer
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from apps.agenda.models.expediente import HORARIOS_DISPONIVEIS
+
 
 class HorarioExpedienteViewSet(viewsets.ModelViewSet):
     """
@@ -65,3 +69,12 @@ class HorarioExpedienteViewSet(viewsets.ModelViewSet):
         expedientes = HorarioExpediente.objects.filter(profissional_id=profissional_id)
         serializer = self.get_serializer(expedientes, many=True)
         return Response(serializer.data)
+    
+
+
+@api_view(['GET'])
+def horarios_estabelecimento(request):
+    """
+    Retorna a lista de horários disponíveis do estabelecimento.
+    """
+    return Response([h[1] for h in HORARIOS_DISPONIVEIS])

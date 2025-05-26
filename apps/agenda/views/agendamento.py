@@ -7,9 +7,7 @@ from collections import defaultdict
 from apps.agenda.models import Agendamento, HorarioExpediente, Horario
 from apps.agenda.serializers import AgendamentoSerializer
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from apps.agenda.models.expediente import HORARIOS_DISPONIVEIS
+
 
 
 class AgendamentoViewSet(viewsets.ModelViewSet):
@@ -122,9 +120,4 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
         return Response(agenda_resposta)
     
 
-    @api_view(['GET'])
-    def horarios_estabelecimento(request):
-        """
-        Retorna a lista de horários disponíveis do estabelecimento.
-        """
-        return Response([h[1] for h in HORARIOS_DISPONIVEIS])
+ 
