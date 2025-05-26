@@ -3,7 +3,7 @@ from .models import Usuario, TipoUsuario
 
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    # Agora o campo é uma URL (string), não mais imagem binária
+    # Campos customizados
     foto_perfil = serializers.URLField(required=False, allow_null=True, allow_blank=True)
     password = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
@@ -27,10 +27,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
-        # Atualiza outros campos normalmente
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        # Se veio uma nova senha, atualiza usando set_password
         if password:
             instance.set_password(password)
         instance.save()

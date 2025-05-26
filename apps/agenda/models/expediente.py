@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import time
 
 DIAS_DA_SEMANA = [
     (0, 'Segunda'),
@@ -39,6 +38,7 @@ HORARIOS_DISPONIVEIS = [
     (24, '20:00'),
 ]
 
+
 class HorarioExpediente(models.Model):
     profissional = models.ForeignKey(
         'usuario.Usuario',
@@ -49,7 +49,8 @@ class HorarioExpediente(models.Model):
     horarios = models.ManyToManyField('Horario', related_name='expedientes')
 
     def __str__(self):
-        return f"{self.profissional} - {DIAS_DA_SEMANA[self.dia_semana][1]}"
+        return f"{self.profissional} - {dict(DIAS_DA_SEMANA).get(self.dia_semana, 'Desconhecido')}"
+
 
 class Horario(models.Model):
     horario = models.TimeField()

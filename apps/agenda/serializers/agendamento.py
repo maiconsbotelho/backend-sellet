@@ -7,13 +7,18 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
+        """
+        Chama o método clean() do model para validar as regras de negócio.
+        Garante que as mesmas validações do model sejam aplicadas no serializer.
+        """
+        # Validação de edição (update)
         if self.instance:
-            # É uma edição: use a instância existente e atualize os dados nela
             for attr, value in data.items():
                 setattr(self.instance, attr, value)
             self.instance.clean()
         else:
-            # É uma criação: instancia novo agendamento
+            # Validação de criação (create)
             agendamento = Agendamento(**data)
             agendamento.clean()
+
         return data

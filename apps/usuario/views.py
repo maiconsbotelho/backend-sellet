@@ -5,13 +5,16 @@ from .serializers import UsuarioSerializer, UsuarioCreateSerializer
 
 class UsuarioViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para listar, criar, editar e deletar usuários.
+    API para gerenciar usuários:
+    - Listar, criar, editar e deletar usuários.
+    - Filtrar usuários por tipo (?tipo=CLIENTE, PROFISSIONAL, ADMIN).
     """
     queryset = Usuario.objects.all()
 
     def get_queryset(self):
         """
-        Permite filtrar usuários por tipo (?tipo=CLIENTE, PROFISSIONAL, ADMIN)
+        Permite filtrar usuários por tipo usando o parâmetro ?tipo=
+        Exemplo: /api/usuarios/?tipo=CLIENTE
         """
         tipo = self.request.query_params.get('tipo')
         if tipo:
@@ -20,7 +23,7 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         """
-        Usa serializer específico ao criar usuários (com validação de senha).
+        Usa o serializer de criação para POST, e o padrão para outras ações.
         """
         if self.action == 'create':
             return UsuarioCreateSerializer
@@ -28,6 +31,6 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """
-        Salva um novo usuário utilizando o serializer apropriado.
+        Salva um novo usuário.
         """
         serializer.save()

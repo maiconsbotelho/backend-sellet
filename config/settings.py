@@ -130,7 +130,7 @@ USE_TZ = True
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': None,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'apps.usuario.authentication.CookieJWTAuthentication',
+        'apps.usuario.auth.authentication.CookieJWTAuthentication',
     ],
 }
 

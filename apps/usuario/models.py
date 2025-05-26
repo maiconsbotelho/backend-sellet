@@ -43,10 +43,7 @@ class Usuario(AbstractUser):
     email = models.EmailField(unique=True)
     nome_completo = models.CharField(max_length=255)
     tipo = models.CharField(max_length=20, choices=TipoUsuario.choices)
-    created_at = models.DateTimeField(default=now, editable=False)
-    updated_at = models.DateTimeField(auto_now=True)
 
-    # Campos opcionais
     telefone = models.CharField(max_length=15, null=True, blank=True)
     cpf = models.CharField(max_length=11, null=True, blank=True, unique=True)
     cep = models.CharField(max_length=8, null=True, blank=True)
@@ -55,8 +52,10 @@ class Usuario(AbstractUser):
     cidade = models.CharField(max_length=100, null=True, blank=True)
     uf = models.CharField(max_length=2, null=True, blank=True)
 
-    # Foto de perfil via URL (ex: Supabase)
     foto_perfil = models.URLField(null=True, blank=True)
+
+    created_at = models.DateTimeField(default=now, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nome_completo', 'tipo']
