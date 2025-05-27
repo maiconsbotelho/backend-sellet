@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import datetime, timedelta
+from uuid import uuid4 
 
 from apps.agenda.models.expediente import HorarioExpediente
 from apps.servicos.models import Servico
@@ -26,6 +27,8 @@ class Agendamento(models.Model):
         null=True, blank=True,
         help_text="Duração personalizada em minutos para este agendamento (opcional)."
     )
+
+    recorrencia_id = models.UUIDField(null=True, blank=True, db_index=True)
 
     class Meta:
         ordering = ['data', 'hora']

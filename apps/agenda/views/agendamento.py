@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from datetime import datetime, timedelta
 from collections import defaultdict
+from uuid import uuid4
 
 from apps.agenda.models import Agendamento, HorarioExpediente, Horario
 from apps.agenda.serializers import AgendamentoSerializer
@@ -134,7 +135,8 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
 
         if not recorrencia or repeticoes <= 1:
             return super().create(request, *args, **kwargs)
-
+        
+        recorrencia_id = str(uuid4())
         agendamentos_criados = []
         erros = []
         try:
@@ -144,6 +146,7 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
 
         for i in range(repeticoes):
             data['data'] = (data_inicial + timedelta(weeks=recorrencia * i)).strftime('%Y-%m-%d')
+            data['recorrencia_id'] = recorrencia_id
             serializer = self.get_serializer(data=data)
             try:
                 serializer.is_valid(raise_exception=True)
