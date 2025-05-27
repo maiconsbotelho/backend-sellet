@@ -122,6 +122,21 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
         return Response(agenda_resposta)
     
 
+    @action(detail=False, methods=['delete'], url_path='excluir-recorrencia')
+    def excluir_recorrencia(self, request):
+        """
+        Exclui todos os agendamentos de uma mesma recorrência.
+        Espera receber {"recorrencia_id": "<uuid>"} no corpo da requisição.
+        """
+        recorrencia_id = request.data.get('recorrencia_id')
+        if not recorrencia_id:
+            return Response({"erro": "recorrencia_id é obrigatório."}, status=status.HTTP_400_BAD_REQUEST)
+        qs = Agendamento.objects.filter(recorrencia_id=recorrencia_id)
+        count = qs.count()
+        qs.delete()
+        return Response({"removidos": count}, status=status.HTTP_200_OK)
+    
+
     def create(self, request, *args, **kwargs):
         """
         Permite criar agendamentos recorrentes.
