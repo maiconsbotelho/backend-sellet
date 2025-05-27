@@ -11,6 +11,14 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         Chama o método clean() do model para validar as regras de negócio.
         Garante que as mesmas validações do model sejam aplicadas no serializer.
         """
+
+        user = self.context['request'].user
+        tipos_livres = ['PROFISSIONAL', 'ADMIN']
+        if hasattr(user, 'tipo') and user.tipo in tipos_livres:
+        # Se o usuário autenticado for profissional ou admin, permite agendamento livre,
+        # pulando as validações de conflito de horário e expediente.
+            return data
+        
         # Validação de edição (update)
         if self.instance:
             for attr, value in data.items():
