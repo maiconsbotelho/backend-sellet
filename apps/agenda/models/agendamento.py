@@ -116,5 +116,5 @@ class Agendamento(models.Model):
 
     def save(self, *args, **kwargs):
         """Chama clean() antes de salvar."""
-        self.clean()
+        # self.clean()
         super().save(*args, **kwargs)
