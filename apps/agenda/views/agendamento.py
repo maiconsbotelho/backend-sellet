@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import status
 from datetime import datetime, timedelta
 from collections import defaultdict
 
@@ -118,6 +119,42 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
             agenda_resposta.append(linha)
 
         return Response(agenda_resposta)
+    
+
+    def create(self, request, *args, **kwargs):
+        """
+        Permite criar agendamentos recorrentes.
+        Parâmetros extras (opcionais):
+        - recorrencia: 1 (semanal), 2 (quinzenal), 4 (mensal)
+        - repeticoes: número de vezes que o agendamento deve se repetir
+        """
+        data = request.data.copy()
+        recorrencia = int(data.get('recorrencia') or 0)  # 0 = não repetir
+        repeticoes = int(data.get('repeticoes') or 1)
+
+        if not recorrencia or repeticoes <= 1:
+            return super().create(request, *args, **kwargs)
+
+        agendamentos_criados = []
+        erros = []
+        try:
+            data_inicial = datetime.strptime(data['data'], '%Y-%m-%d').date()
+        except Exception:
+            return Response({"erro": "Data inicial inválida."}, status=status.HTTP_400_BAD_REQUEST)
+
+        for i in range(repeticoes):
+            data['data'] = (data_inicial + timedelta(weeks=recorrencia * i)).strftime('%Y-%m-%d')
+            serializer = self.get_serializer(data=data)
+            try:
+                serializer.is_valid(raise_exception=True)
+                self.perform_create(serializer)
+                agendamentos_criados.append(serializer.data)
+            except Exception as e:
+                erros.append({'data': data['data'], 'erro': str(e)})
+
+        if erros:
+            return Response({'criados': agendamentos_criados, 'erros': erros}, status=207)
+        return Response(agendamentos_criados, status=201)
     
 
  
