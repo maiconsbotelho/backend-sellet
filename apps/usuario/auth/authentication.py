@@ -29,4 +29,4 @@ class CookieJWTAuthentication(JWTAuthentication):
         user = self.get_user(validated_token)
         logger.debug(f"🔐 Usuário autenticado via token: {user}")
 
-        return user, validated_token
+        return (user, validated_token)
