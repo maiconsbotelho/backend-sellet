@@ -13,6 +13,7 @@ class AgendamentoSerializer(serializers.ModelSerializer):
         """
 
         user = self.context['request'].user
+        print(f"DEBUG: user={user}, tipo={getattr(user, 'tipo', None)}")
         tipos_livres = ['PROFISSIONAL', 'ADMIN']
         if hasattr(user, 'tipo') and user.tipo in tipos_livres:
         # Se o usuário autenticado for profissional ou admin, permite agendamento livre,
