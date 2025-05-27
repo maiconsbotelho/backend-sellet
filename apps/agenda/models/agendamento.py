@@ -22,6 +22,10 @@ class Agendamento(models.Model):
     servico = models.ForeignKey(Servico, on_delete=models.CASCADE)
     data = models.DateField()
     hora = models.TimeField()
+    duracao_personalizada = models.PositiveIntegerField(
+        null=True, blank=True,
+        help_text="Duração personalizada em minutos para este agendamento (opcional)."
+    )
 
     class Meta:
         ordering = ['data', 'hora']
@@ -41,10 +45,12 @@ class Agendamento(models.Model):
 
     @property
     def hora_fim_dt(self):
-        """Retorna o datetime de fim do agendamento, baseado na duração do serviço."""
+        """Retorna o datetime de fim do agendamento, baseado na duração do serviço ou personalizada."""
         inicio = self.hora_inicio_dt
         if not inicio or not self.servico_id:
             return None
+        if self.duracao_personalizada:
+            return inicio + timedelta(minutes=self.duracao_personalizada)
         try:
             return inicio + self.servico.duracao
         except (Servico.DoesNotExist, AttributeError):
