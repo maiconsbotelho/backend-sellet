@@ -6,6 +6,8 @@ import os
 from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
+def strtobool(val):
+    return val.lower() in ("y", "yes", "t", "true", "on", "1")
 from corsheaders.defaults import default_headers
 
 load_dotenv()  # Carrega variáveis de ambiente do .env
@@ -15,9 +17,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------
 # Configurações básicas
 # ------------------------------------
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-dev-key')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY não definida no ambiente!")
+
+DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
+
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+if not ALLOWED_HOSTS:
+    raise ValueError("ALLOWED_HOSTS não definidos no ambiente!")
+ALLOWED_HOSTS = ALLOWED_HOSTS.split(',')
 
 # ------------------------------------
 # Aplicativos
@@ -139,7 +148,7 @@ REST_FRAMEWORK = {
 # ------------------------------------
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "AUTH_HEADER_TYPES": ("Bearer",),
@@ -165,6 +174,10 @@ CSRF_TRUSTED_ORIGINS = [
 # Segurança extra HTTP
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_SECONDS = 31536000  # 1 ano
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_SSL_REDIRECT = not DEBUG
 
 # ------------------------------------
 # CORS
@@ -196,6 +209,6 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "DEBUG",
+        "level": "DEBUG" if DEBUG else "INFO",
     },
 }
