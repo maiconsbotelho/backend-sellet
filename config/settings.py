@@ -3,11 +3,11 @@
 # ------------------------------------
 from pathlib import Path
 import os
+import sys
 from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
-def strtobool(val):
-    return val.lower() in ("y", "yes", "t", "true", "on", "1")
+# from distutils.util import strtobool
 from corsheaders.defaults import default_headers
 
 load_dotenv()  # Carrega variáveis de ambiente do .env
@@ -17,11 +17,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ------------------------------------
 # Configurações básicas
 # ------------------------------------
-SECRET_KEY = os.getenv('SECRET_KEY')
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY não definida no ambiente!")
 
-DEBUG = bool(strtobool(os.getenv('DEBUG', 'False')))
+# Ajuste para SECRET_KEY durante o build (collectstatic)
+if 'collectstatic' in sys.argv:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dummy-secret-key-for-collectstatic')
+else:
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    if not SECRET_KEY:
+        raise ValueError("SECRET_KEY não definida no ambiente!")
+
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
 if not ALLOWED_HOSTS:
