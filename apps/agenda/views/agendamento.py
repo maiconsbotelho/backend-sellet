@@ -112,6 +112,7 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                         "servico_id": agendamento.servico.id,
                         "servico_nome": agendamento.servico.nome,
                         "status": agendamento.status,
+                        "recorrencia_id": str(agendamento.recorrencia_id) if agendamento.recorrencia_id else None,
                     }
                 elif no_expediente:
                     linha[data_str] = {"ocupado": False}
