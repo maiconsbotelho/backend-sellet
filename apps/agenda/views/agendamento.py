@@ -110,7 +110,8 @@ class AgendamentoViewSet(viewsets.ModelViewSet):
                         "cliente_id": agendamento.cliente.id,
                         "nome_cliente": str(agendamento.cliente),
                         "servico_id": agendamento.servico.id,
-                        "servico_nome": agendamento.servico.nome
+                        "servico_nome": agendamento.servico.nome,
+                        "status": agendamento.status,
                     }
                 elif no_expediente:
                     linha[data_str] = {"ocupado": False}
