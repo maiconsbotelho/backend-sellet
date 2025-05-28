@@ -8,6 +8,18 @@ from apps.servicos.models import Servico
 
 
 class Agendamento(models.Model):
+    STATUS_CHOICES = [
+        ('AGENDADO', 'Agendado'),
+        ('CONCLUIDO', 'Concluído'),
+        ('CANCELADO', 'Cancelado'),
+    ]
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default='AGENDADO',
+        verbose_name='Situação'
+    )
+    
     cliente = models.ForeignKey(
         'usuario.Usuario',
         on_delete=models.CASCADE,
