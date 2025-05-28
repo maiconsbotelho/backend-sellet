@@ -22,8 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
 
 # Ajuste para SECRET_KEY durante o build (collectstatic)
-
-
 # SECRET_KEY
 if 'collectstatic' in sys.argv:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dummy-secret-key-for-collectstatic')
