@@ -18,20 +18,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configurações básicas
 # ------------------------------------
 
+# DEBUG
+DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+
 # Ajuste para SECRET_KEY durante o build (collectstatic)
+
+
+# SECRET_KEY
 if 'collectstatic' in sys.argv:
     SECRET_KEY = os.getenv('SECRET_KEY', 'dummy-secret-key-for-collectstatic')
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'dummy-allowed-hosts').split(',')
 else:
     SECRET_KEY = os.getenv('SECRET_KEY')
     if not SECRET_KEY:
         raise ValueError("SECRET_KEY não definida no ambiente!")
 
-DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 'yes')
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
+    if not ALLOWED_HOSTS:
+        raise ValueError("ALLOWED_HOSTS não definidos no ambiente!")
+    ALLOWED_HOSTS = ALLOWED_HOSTS.split(',')
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS')
-if not ALLOWED_HOSTS:
-    raise ValueError("ALLOWED_HOSTS não definidos no ambiente!")
-ALLOWED_HOSTS = ALLOWED_HOSTS.split(',')
 
 # ------------------------------------
 # Aplicativos
